@@ -1,7 +1,7 @@
-用例1  
-输入：  
-agxnzyimk  
-输出：  
+用例1
+输入：
+agxnzyimk
+输出：
 Preorder: xigamknzy
 Inorder: agikmnxyz
 Postorder: agknmiyzx
@@ -15,10 +15,10 @@ x
     i
         g
             a
-用例2：  
-输入：  
-asdfghjkl  
-输出：  
+用例2：
+输入：
+asdfghjkl
+输出：
 Preorder: gdafjhlks
 Inorder: adfghjkls
 Postorder: afdhksljg
