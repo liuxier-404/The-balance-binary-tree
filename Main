@@ -1,0 +1,115 @@
+#include<cstdio>
+#include<cstdlib>
+using namespace std;
+typedef struct node {
+	char data;
+	struct node* lchild, * rchild;
+}VAL;
+int Max(int a, int b) {
+	return a > b ? a : b;
+}
+VAL* root = NULL;
+int Heigh(VAL* p) {
+	if (p == NULL)
+		return 0;
+	return Max(Heigh(p->lchild), Heigh(p->rchild)) + 1;
+}
+VAL* LL(VAL* p) {
+	VAL* nw = p->lchild;
+	p->lchild = nw->rchild;
+	nw->rchild = p;
+	return nw;
+}
+VAL* RR(VAL* p) {
+	VAL* nw = p->rchild;
+	p->rchild = nw->lchild;
+	nw->lchild = p;
+	return nw;
+}
+VAL* LR(VAL* p) {
+	p->lchild = RR(p->lchild);
+	return LL(p);
+}
+VAL* RL(VAL* p) {
+	p->rchild = LL(p->rchild);
+	return RR(p);
+}
+VAL* Insert(char data, VAL* p) {
+	if (p == NULL) {
+		p = (VAL*)malloc(sizeof(VAL));
+		p->data = data;
+		p->lchild = p->rchild = NULL;
+	}
+	else {
+		if (data < p->data) {
+			p->lchild=Insert(data, p->lchild);
+			if (Heigh(p->lchild) - Heigh(p->rchild) > 1) {
+				if (data < p->lchild->data)
+					p = LL(p);
+				else
+					p = LR(p);
+			}
+		}
+		else if (data > p->data) {
+			p->rchild = Insert(data, p->rchild);
+			if (Heigh(p->rchild) - Heigh(p->lchild) > 1) {
+				if (data > p->rchild->data)
+					p = RR(p);
+				else
+					p = RL(p);
+			}
+		}
+	}
+	return p;
+}
+void Preorder(VAL* p) {
+	printf("%c", p->data);
+	if (p->lchild != NULL)
+		Preorder(p->lchild);
+	if (p->rchild != NULL)
+		Preorder(p->rchild);
+}
+void Inorder(VAL* p) {
+	if (p->lchild != NULL)
+		Inorder(p->lchild);
+	printf("%c", p->data);
+	if (p->rchild != NULL)
+		Inorder(p->rchild);
+}
+void Postorder(VAL* p) {
+	if (p->lchild != NULL)
+		Postorder(p->lchild);
+	if (p->rchild != NULL)
+		Postorder(p->rchild);
+	printf("%c", p->data);
+}
+void Print(VAL* p, int n) {
+	if (p->rchild != NULL)
+		Print(p->rchild, n + 4);
+	for (int i = 0; i < n; i++)
+		printf(" ");
+	printf("%c\n", p->data);
+	if (p->lchild != NULL)
+		Print(p->lchild, n + 4);
+}
+int main() {
+	char ch;
+	while (1) {
+		scanf("%c", &ch);
+		if (ch == '\n')
+			break;
+		root=Insert(ch, root);
+	}
+	printf("Preorder: ");
+	Preorder(root);
+	printf("\n");
+	printf("Inorder: ");
+	Inorder(root);
+	printf("\n");
+	printf("Postorder: ");
+	Postorder(root);
+	printf("\n");
+	printf("Tree:\n");
+	Print(root, 0);
+	return 0;
+}
